@@ -1,1 +1,1 @@
-grep '> Interest for\|< DATA for' log.txt
+grep 'ndn.fw:OnInterest\|ndn.fw:OnData' log.txt
