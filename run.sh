@@ -1,2 +1,2 @@
-NS_LOG=ndn.ConsumerZipfMandelbrot:ndn.Consumer:ndn.Producer ./waf --run=ndn-simple-with-cs &> log.txt
+NS_LOG=ndn.fw:ndn.ApiFace:ndn.ConsumerZipfMandelbrot:ndn.Consumer:ndn.Producer ./waf --run=ndn-simple-with-cs &> log.txt
 
