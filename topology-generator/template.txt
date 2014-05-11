@@ -1,0 +1,24 @@
+
+router
+
+#node			comment		yPos		xPos
+{% for counter in range(1,number_consumers) -%}
+consumer{{ loop.index }}                N/A             {{2*loop.index -1}}               3
+{% endfor %}
+Router1                  N/A             {{   number_consumers - 1 }}             5
+
+{% for counter in range(1,number_producers) -%}
+producer{{ loop.index }}                N/A             {{2*loop.index -1}}               3
+{% endfor %}
+
+
+link
+
+# srcNode dstNode bandwidth metric delay queue
+{% for counter in range(1,number_consumers) -%}
+consumer{{ loop.index }}                Router1        10Mbps      1        10ms    20
+{% endfor %}
+{% for counter in range(1,number_producers) -%}
+producer{{ loop.index }}                Router1        10Mbps      1        10ms    20
+{% endfor %}
+
