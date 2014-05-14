@@ -73,19 +73,45 @@ main (int argc, char *argv[])
   // Installing applications
 
   // Consumer
-  ndn::AppHelper consumerHelper ("ns3::ndn::ConsumerZipfMandelbrot");
-  // Consumer will request /prefix/0, /prefix/1, ...
-  consumerHelper.SetPrefix ("/producer1");
+  ndn::AppHelper consumerHelper ("ns3::ndn::ConsumerZipfPrefixMandelbrot");
+  // Consumer will request /prefix0, /prefix1, ...
+  consumerHelper.SetPrefix ("/producer");
   consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
   consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
-  consumerHelper.Install (nodes.Get (0)); // first node
+
+NodeContainer consumerNodes;
+int nodeIndex = 1;
+std::string consumernodeNamePrefix("consumer");
+Ptr<Node> consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+while(consumerNode != NULL)
+{
+  consumerNodes.Add (consumerNode);
+  consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+}
+consumerHelper.Install(consumerNodes);
+
+
+
+int nodeIndex = 1;
+std::string producernodeNamePrefix("producer");
+Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+while(producerNode != NULL)
+{
+  NodeContainer producerNodes;
+  producerNodes.Add (producerNode);
 
   // Producer
   ndn::AppHelper producerHelper ("ns3::ndn::Producer");
   // Producer will reply to all requests starting with /prefix
-  producerHelper.SetPrefix ("/prefix");
+  producerHelper.SetPrefix ("/producer"+  boost::lexical_cast<std::string>(nodeIndex));
   producerHelper.SetAttribute ("PayloadSize", StringValue("1024"));
-  producerHelper.Install (nodes.Get (2)); // last node
+  producerHelper.Install(producerNodes);
+
+  producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+}
+
+
+
 
   Simulator::Stop (Seconds (20.0));
 
