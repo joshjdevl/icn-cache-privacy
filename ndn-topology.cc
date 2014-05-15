@@ -22,6 +22,7 @@
 #include "ns3/network-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/ndnSIM-module.h"
+#include <boost/lexical_cast.hpp>
 
 using namespace ns3;
 
@@ -92,9 +93,9 @@ consumerHelper.Install(consumerNodes);
 
 
 
-int nodeIndex = 1;
+int producernodeIndex = 1;
 std::string producernodeNamePrefix("producer");
-Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
 while(producerNode != NULL)
 {
   NodeContainer producerNodes;
@@ -107,7 +108,7 @@ while(producerNode != NULL)
   producerHelper.SetAttribute ("PayloadSize", StringValue("1024"));
   producerHelper.Install(producerNodes);
 
-  producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+  producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
 }
 
 
