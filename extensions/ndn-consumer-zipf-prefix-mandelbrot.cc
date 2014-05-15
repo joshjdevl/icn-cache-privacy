@@ -18,7 +18,7 @@
  * Author: Xiaoke Jiang <shock.jiang@gmail.com>
  */
 
-#include "ndn-consumer-zipf-mandelbrot.h"
+#include "ndn-consumer-zipf-prefix-mandelbrot.h"
 
 #include "ns3/ndn-app-face.h"
 #include "ns3/ndn-interest.h"
@@ -27,7 +27,7 @@
 #include "ns3/ndnSIM/utils/ndn-fw-hop-count-tag.h"
 
 #include <math.h>
-
+#include <boost/lexical_cast.hpp>
 
 NS_LOG_COMPONENT_DEFINE ("ndn.ConsumerZipfPrefixMandelbrot");
 
@@ -58,6 +58,11 @@ ConsumerZipfPrefixMandelbrot::GetTypeId (void)
                    StringValue ("0.7"),
                    MakeDoubleAccessor (&ConsumerZipfPrefixMandelbrot::SetS, &ConsumerZipfPrefixMandelbrot::GetS),
                    MakeDoubleChecker<double> ())
+
+    .AddAttribute ("producerprefix", "prefix of the producers",
+		   StringValue("/producer"),
+                   MakeStringAccessor (&ConsumerZipfPrefixMandelbrot::m_producerPrefix),
+		   MakeStringChecker ())
     ;
 
   return tid;
@@ -175,8 +180,8 @@ ConsumerZipfPrefixMandelbrot::SendPacket() {
   // std::cout << Simulator::Now ().ToDouble (Time::S) << "s -> " << seq << "\n";
 
   //
-  Ptr<Name> nameWithSequence = Create<Name> (m_interestName);
-  nameWithSequence->appendSeqNum (seq);
+  Ptr<Name> nameWithSequence = Create<Name> (m_producerPrefix+boost::lexical_cast<std::string>(seq));
+  //nameWithSequence->appendSeqNum (seq);
   //
 
   Ptr<Interest> interest = Create<Interest> ();

@@ -88,6 +88,7 @@ private:
   double m_q;  //q in (k+q)^s
   double m_s;  //s in (k+q)^s
   std::vector<double> m_Pcum;  //cumulative probability
+  std::string m_producerPrefix;
 
   UniformVariable m_SeqRng; //RNG
 };

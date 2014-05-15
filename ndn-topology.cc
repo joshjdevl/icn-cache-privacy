@@ -76,9 +76,10 @@ main (int argc, char *argv[])
   // Consumer
   ndn::AppHelper consumerHelper ("ns3::ndn::ConsumerZipfPrefixMandelbrot");
   // Consumer will request /prefix0, /prefix1, ...
-  consumerHelper.SetPrefix ("/producer");
+  //consumerHelper.SetProducerPrefix ("/producer");
   consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
   consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
+  consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
 
 NodeContainer consumerNodes;
 int nodeIndex = 1;
