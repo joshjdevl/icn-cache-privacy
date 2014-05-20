@@ -80,6 +80,7 @@ main (int argc, char *argv[])
   consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
   consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
   consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
+  consumerHelper.SetAttribute("NumberOfContents", StringValue("9"));
 
 NodeContainer consumerNodes;
 int nodeIndex = 1;
@@ -93,7 +94,6 @@ while(consumerNode != NULL)
 consumerHelper.Install(consumerNodes);
 
 
-
 int producernodeIndex = 1;
 std::string producernodeNamePrefix("producer");
 Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
@@ -105,14 +105,14 @@ while(producerNode != NULL)
   // Producer
   ndn::AppHelper producerHelper ("ns3::ndn::Producer");
   // Producer will reply to all requests starting with /prefix
-  producerHelper.SetPrefix ("/producer"+  boost::lexical_cast<std::string>(nodeIndex));
+  std::string pprefix = "/producer"+  boost::lexical_cast<std::string>(producernodeIndex);
+  std::cout<<"pprefix="<<pprefix<<std::endl;
+  producerHelper.SetPrefix (pprefix);
   producerHelper.SetAttribute ("PayloadSize", StringValue("1024"));
   producerHelper.Install(producerNodes);
 
   producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
 }
-
-
 
 
   Simulator::Stop (Seconds (20.0));

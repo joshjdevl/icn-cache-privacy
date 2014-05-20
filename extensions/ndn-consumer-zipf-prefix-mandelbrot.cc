@@ -180,6 +180,7 @@ ConsumerZipfPrefixMandelbrot::SendPacket() {
   // std::cout << Simulator::Now ().ToDouble (Time::S) << "s -> " << seq << "\n";
 
   //
+  NS_LOG_INFO("seq="<<seq);
   Ptr<Name> nameWithSequence = Create<Name> (m_producerPrefix+boost::lexical_cast<std::string>(seq));
   //nameWithSequence->appendSeqNum (seq);
   //
