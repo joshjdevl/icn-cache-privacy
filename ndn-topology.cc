@@ -71,32 +71,9 @@ main (int argc, char *argv[])
                               "MaxSize", "10000");
   ndnHelper.InstallAll ();
 
-  // Installing applications
-
-  // Consumer
-  ndn::AppHelper consumerHelper ("ns3::ndn::ConsumerZipfPrefixMandelbrot");
-  // Consumer will request /prefix0, /prefix1, ...
-  //consumerHelper.SetProducerPrefix ("/producer");
-  consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
-  consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
-  consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
-  consumerHelper.SetAttribute("NumberOfContents", StringValue("9"));
-
-NodeContainer consumerNodes;
-int nodeIndex = 1;
-std::string consumernodeNamePrefix("consumer");
-Ptr<Node> consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
-while(consumerNode != NULL)
-{
-  consumerNodes.Add (consumerNode);
-  consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
-}
-consumerHelper.Install(consumerNodes);
-
-
 int producernodeIndex = 1;
 std::string producernodeNamePrefix("producer");
-Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
+Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex));
 while(producerNode != NULL)
 {
   NodeContainer producerNodes;
@@ -114,8 +91,38 @@ while(producerNode != NULL)
   producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
 }
 
+//producernodeIndex;
 
-  Simulator::Stop (Seconds (20.0));
+int nodeIndex = 1;
+std::string consumernodeNamePrefix("consumer");
+Ptr<Node> consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+while(consumerNode != NULL)
+{
+
+  NodeContainer consumerNodes;
+  consumerNodes.Add (consumerNode);
+for(int i=1;i<producernodeIndex;i++) {
+  // Consumer
+  ndn::AppHelper consumerHelper ("ns3::ndn::ConsumerZipfMandelbrot");
+  // Consumer will request /prefix0, /prefix1, ...
+  std::string cprefix = "/producer"+  boost::lexical_cast<std::string>(i);
+  std::cout<<"cprefix="<<cprefix<<std::endl;
+  consumerHelper.SetPrefix(cprefix);
+  //consumerHelper.SetProducerPrefix ("/producer");
+  consumerHelper.SetAttribute ("Frequency", StringValue ("100")); // 10 interests a second
+  consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
+  //consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
+  consumerHelper.SetAttribute("NumberOfContents", StringValue("100"));
+  consumerHelper.Install(consumerNodes);
+}
+
+  consumerNode = Names::Find<Node>(consumernodeNamePrefix +  boost::lexical_cast<std::string>(nodeIndex++));
+}
+
+
+
+
+  Simulator::Stop (Seconds (40.0));
 
   Simulator::Run ();
   Simulator::Destroy ();
