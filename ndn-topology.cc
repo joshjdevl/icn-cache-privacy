@@ -109,10 +109,10 @@ for(int i=1;i<producernodeIndex;i++) {
   std::cout<<"cprefix="<<cprefix<<std::endl;
   consumerHelper.SetPrefix(cprefix);
   //consumerHelper.SetProducerPrefix ("/producer");
-  consumerHelper.SetAttribute ("Frequency", StringValue ("100")); // 10 interests a second
+  consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
   consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
   //consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
-  consumerHelper.SetAttribute("NumberOfContents", StringValue("100"));
+  consumerHelper.SetAttribute("NumberOfContents", StringValue("10"));
   consumerHelper.Install(consumerNodes);
 }
 
@@ -122,7 +122,7 @@ for(int i=1;i<producernodeIndex;i++) {
 
 
 
-  Simulator::Stop (Seconds (40.0));
+  Simulator::Stop (Seconds (20.0));
 
   Simulator::Run ();
   Simulator::Destroy ();
