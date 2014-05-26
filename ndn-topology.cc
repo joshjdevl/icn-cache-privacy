@@ -67,13 +67,13 @@ main (int argc, char *argv[])
   ndn::StackHelper ndnHelper;
   ndnHelper.SetDefaultRoutes (true);
   ndnHelper.SetForwardingStrategy ("ns3::ndn::fw::BestRoute");
-  ndnHelper.SetContentStore ("ns3::ndn::cs::Lru",
-                              "MaxSize", "10000");
+  //ndnHelper.SetContentStore ("ns3::ndn::cs::Lru", "MaxSize", "10000");
   ndnHelper.InstallAll ();
 
 int producernodeIndex = 1;
 std::string producernodeNamePrefix("producer");
-Ptr<Node> producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex));
+std::string producerNodeName = producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex);
+Ptr<Node> producerNode = Names::Find<Node>(producerNodeName);
 while(producerNode != NULL)
 {
   NodeContainer producerNodes;
@@ -83,12 +83,12 @@ while(producerNode != NULL)
   ndn::AppHelper producerHelper ("ns3::ndn::Producer");
   // Producer will reply to all requests starting with /prefix
   std::string pprefix = "/producer"+  boost::lexical_cast<std::string>(producernodeIndex);
-  std::cout<<"pprefix="<<pprefix<<std::endl;
+  std::cout<<"producernodeName="<<producerNodeName<<" pprefix="<<pprefix<<std::endl;
   producerHelper.SetPrefix (pprefix);
   producerHelper.SetAttribute ("PayloadSize", StringValue("1024"));
   producerHelper.Install(producerNodes);
-
-  producerNode = Names::Find<Node>(producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++));
+  producerNodeName = producernodeNamePrefix +  boost::lexical_cast<std::string>(producernodeIndex++);
+  producerNode = Names::Find<Node>(producerNodeName);
 }
 
 //producernodeIndex;
@@ -109,10 +109,10 @@ for(int i=1;i<producernodeIndex;i++) {
   std::cout<<"cprefix="<<cprefix<<std::endl;
   consumerHelper.SetPrefix(cprefix);
   //consumerHelper.SetProducerPrefix ("/producer");
-  consumerHelper.SetAttribute ("Frequency", StringValue ("10")); // 10 interests a second
+  consumerHelper.SetAttribute ("Frequency", StringValue ("1")); // 10 interests a second
   consumerHelper.SetAttribute("Randomize",    StringValue ("uniform"));
   //consumerHelper.SetAttribute("producerprefix", StringValue("/producer"));
-  consumerHelper.SetAttribute("NumberOfContents", StringValue("10"));
+  consumerHelper.SetAttribute("NumberOfContents", StringValue("1"));
   consumerHelper.Install(consumerNodes);
 }
 
